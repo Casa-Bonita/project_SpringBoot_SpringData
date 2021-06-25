@@ -8,7 +8,7 @@ public interface MeterService {
 
     List<Meter> findAll();
 
-    void save(Meter meter, int meterPlaceNumber);
+    Meter save(Meter meter, int meterPlaceNumber);
 
     Meter findById(Integer id);
 

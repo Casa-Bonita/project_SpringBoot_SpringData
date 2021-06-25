@@ -8,6 +8,7 @@ import com.casabonita.spring.spring_boot.entity.Reading;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,15 +30,16 @@ public class ReadingServiceImpl implements ReadingService{
     }
 
     @Override
-    public void save(Reading reading, String meterNumber) {
+    @Transactional
+    public Reading save(Reading reading, String meterNumber) {
 
         Reading readingToSave;
 
         if(reading.getId() == null){
             readingToSave = new Reading();
         } else{
-            Optional<Reading> optional = readingRepository.findById(reading.getId());
-            readingToSave = optional.get();
+            readingToSave = readingRepository.findById(reading.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Reading with " + reading.getId() + " not found."));
         }
 
         Meter meter = meterRepository.findMeterByNumber(meterNumber);
@@ -46,8 +48,7 @@ public class ReadingServiceImpl implements ReadingService{
         readingToSave.setTransferData(reading.getTransferData());
         readingToSave.setTransferDate(reading.getTransferDate());
 
-        readingRepository.save(readingToSave);
-
+        return readingRepository.save(readingToSave);
     }
 
     @Override
@@ -62,20 +63,23 @@ public class ReadingServiceImpl implements ReadingService{
         }
 
         return reading;
-
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
 
-        readingRepository.deleteById(id);
+        Optional<Reading> optional = readingRepository.findById(id);
 
+        optional
+                .orElseThrow(() -> new EntityNotFoundException("Reading with " + id + " not found."));
+
+        readingRepository.deleteById(id);
     }
 
     @Override
     public void deleteReadingByMeter_Id(Integer id) {
 
         readingRepository.deleteReadingByMeter_Id(id);
-
     }
 }

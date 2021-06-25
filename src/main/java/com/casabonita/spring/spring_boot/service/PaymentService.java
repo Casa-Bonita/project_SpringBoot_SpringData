@@ -8,7 +8,7 @@ public interface PaymentService {
 
     List<Payment> findAll();
 
-    void save(Payment payment, String accountNumber);
+    Payment save(Payment payment, String accountNumber);
 
     Payment findById(Integer id);
 

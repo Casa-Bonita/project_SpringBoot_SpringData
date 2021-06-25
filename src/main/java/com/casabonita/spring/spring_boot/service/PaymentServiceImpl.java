@@ -4,6 +4,7 @@ import com.casabonita.spring.spring_boot.repository.AccountRepository;
 import com.casabonita.spring.spring_boot.repository.PaymentRepository;
 import com.casabonita.spring.spring_boot.entity.Account;
 import com.casabonita.spring.spring_boot.entity.Payment;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,14 +31,15 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     @Transactional
-    public void save(Payment payment, String accountNumber) {
+    public Payment save(Payment payment, String accountNumber) {
 
         Payment paymentToSave;
 
         if(payment.getId() == null){
             paymentToSave = new Payment();
         } else{
-            paymentToSave = paymentRepository.findById(payment.getId()).orElseThrow(() -> new EntityNotFoundException("Payment with " + payment.getId() + " not found."));
+            paymentToSave = paymentRepository.findById(payment.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Payment with " + payment.getId() + " not found."));
         }
 
         Account account = accountRepository.findAccountByNumber(accountNumber);
@@ -47,7 +49,7 @@ public class PaymentServiceImpl implements PaymentService{
         paymentToSave.setDate(payment.getDate());
         paymentToSave.setPurpose(payment.getPurpose());
 
-        paymentRepository.save(paymentToSave);
+        return paymentRepository.save(paymentToSave);
     }
 
     @Override
@@ -65,16 +67,20 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
 
-        paymentRepository.deleteById(id);
+        Optional<Payment> optional = paymentRepository.findById(id);
 
+        optional
+                .orElseThrow(() -> new EntityNotFoundException("Payment with " + id + " not found."));
+
+        paymentRepository.deleteBy(id);
     }
 
     @Override
     public void deletePaymentByAccount_Id(Integer id) {
 
         paymentRepository.deletePaymentByAccount_Id(id);
-
     }
 }

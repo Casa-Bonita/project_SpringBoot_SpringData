@@ -8,7 +8,7 @@ public interface PlaceService {
 
     List<Place> findAll();
 
-    void save(Place place);
+    Place save(Place place);
 
     Place findById(Integer id);
 

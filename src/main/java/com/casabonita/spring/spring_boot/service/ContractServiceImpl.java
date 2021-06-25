@@ -6,7 +6,9 @@ import com.casabonita.spring.spring_boot.entity.Contract;
 import com.casabonita.spring.spring_boot.entity.Place;
 import com.casabonita.spring.spring_boot.entity.Renter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,15 +37,16 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
-    public void save(Contract contract, int contractPlaceNumber, String renterName) {
+    @Transactional
+    public Contract save(Contract contract, int contractPlaceNumber, String renterName) {
 
         Contract contractToSave;
 
         if(contract.getId() == null){
             contractToSave = new Contract();
         } else{
-            Optional<Contract> optional = contractRepository.findById(contract.getId());
-            contractToSave = optional.get();
+            contractToSave = contractRepository.findById(contract.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Contract with " + contract.getId() + " not found."));
         }
 
         contractToSave.setNumber(contract.getNumber());
@@ -59,8 +62,7 @@ public class ContractServiceImpl implements ContractService{
         Renter renter = renterRepository.findByName(renterName);
         contractToSave.setRenter(renter);
 
-        contractRepository.save(contractToSave);
-
+        return contractRepository.save(contractToSave);
     }
 
     @Override
@@ -96,7 +98,13 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
+
+        Optional<Contract> optional = contractRepository.findById(id);
+
+        optional
+                .orElseThrow(() -> new EntityNotFoundException("Contract with " + id + " not found."));
 
         Account account = accountRepository.findAccountByAccountContract_Id(id);
         Integer accountId = account.getId();

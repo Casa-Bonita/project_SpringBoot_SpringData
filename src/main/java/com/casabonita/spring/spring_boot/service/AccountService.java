@@ -8,7 +8,7 @@ public interface AccountService {
 
     List<Account> findAll();
 
-    void save(Account account, String accountContractNumber);
+    Account save(Account account, String accountContractNumber);
 
     Account findById(Integer id);
 

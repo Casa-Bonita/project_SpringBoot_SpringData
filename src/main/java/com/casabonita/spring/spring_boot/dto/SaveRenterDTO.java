@@ -1,55 +1,23 @@
-package com.casabonita.spring.spring_boot.entity;
+package com.casabonita.spring.spring_boot.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-@Entity
-@Table(name="renter")
-public class Renter {
+public class SaveRenterDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Integer id;
-
-    @Column(name="name")
     private String name;
-
-    @Column(name="ogrn")
     private String ogrn;
-
-    @Column(name="inn")
     private String inn;
-
-    @Column(name="registr_date")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date registrDate;
-
-    @Column(name="address")
     private String address;
-
-    @Column(name="director_name")
     private String directorName;
-
-    @Column(name="contact_name")
     private String contactName;
-
-    @Column(name="phone")
     private String phoneNumber;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "renter")
-    private List<Contract> contractList;
-
-    public Renter() {
+    public SaveRenterDTO() {
     }
 
-    public Renter(String name, String ogrn, String inn, Date registrDate, String address, String directorName,
-                  String contactName, String phoneNumber) {
+    public SaveRenterDTO(String name, String ogrn, String inn, Date registrDate, String address, String directorName,
+                         String contactName, String phoneNumber) {
         this.name = name;
         this.ogrn = ogrn;
         this.inn = inn;
@@ -58,14 +26,6 @@ public class Renter {
         this.directorName = directorName;
         this.contactName = contactName;
         this.phoneNumber = phoneNumber;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -130,13 +90,5 @@ public class Renter {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public List<Contract> getContractList() {
-        return contractList;
-    }
-
-    public void setContractList(List<Contract> contractList) {
-        this.contractList = contractList;
     }
 }

@@ -7,7 +7,9 @@ import com.casabonita.spring.spring_boot.entity.Meter;
 import com.casabonita.spring.spring_boot.entity.Place;
 import com.casabonita.spring.spring_boot.repository.ReadingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +33,8 @@ public class MeterServiceImpl implements MeterService{
     }
 
     @Override
-    public void save(Meter meter, int meterPlaceNumber) {
+    @Transactional
+    public Meter save(Meter meter, int meterPlaceNumber) {
 
         Meter meterToSave;
 
@@ -39,8 +42,8 @@ public class MeterServiceImpl implements MeterService{
             meterToSave = new Meter();
         }
         else{
-            Optional<Meter> optional = meterRepository.findById(meter.getId());
-            meterToSave = optional.get();
+            meterToSave = meterRepository.findById(meter.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Meter with " + meter.getId() + " not found."));
         }
 
         meterToSave.setNumber(meter.getNumber());
@@ -48,7 +51,7 @@ public class MeterServiceImpl implements MeterService{
         Place place = placeRepository.findPlaceByNumber(meterPlaceNumber);
         meterToSave.setMeterPlace(place);
 
-        meterRepository.save(meterToSave);
+        return  meterRepository.save(meterToSave);
     }
 
     @Override
@@ -78,7 +81,13 @@ public class MeterServiceImpl implements MeterService{
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
+
+        Optional<Meter> optional = meterRepository.findById(id);
+
+        optional
+                .orElseThrow(() -> new EntityNotFoundException("Meter with " + id + " not found."));
 
         readingRepository.deleteReadingByMeter_Id(id);
         meterRepository.deleteById(id);

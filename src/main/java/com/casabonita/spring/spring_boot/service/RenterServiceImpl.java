@@ -7,6 +7,7 @@ import com.casabonita.spring.spring_boot.entity.Renter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +34,28 @@ public class RenterServiceImpl implements RenterService{
     }
 
     @Override
-    public void save(Renter renter) {
+    @Transactional
+    public Renter save(Renter renter) {
 
-        renterRepository.save(renter);
+        Renter renterToSave;
+
+        if(renter.getId() == null){
+            renterToSave = new Renter();
+        }else{
+            renterToSave = renterRepository.findById(renter.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Renter with " + renter.getId() + " not found."));
+        }
+
+        renterToSave.setName(renter.getName());
+        renterToSave.setOgrn(renter.getOgrn());
+        renterToSave.setInn(renter.getInn());
+        renterToSave.setRegistrDate(renter.getRegistrDate());
+        renterToSave.setAddress(renter.getAddress());
+        renterToSave.setDirectorName(renter.getDirectorName());
+        renterToSave.setContactName(renter.getContactName());
+        renterToSave.setPhoneNumber(renter.getPhoneNumber());
+
+        return renterRepository.save(renterToSave);
     }
 
     @Override
@@ -59,7 +79,13 @@ public class RenterServiceImpl implements RenterService{
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
+
+        Optional<Renter> optional = renterRepository.findById(id);
+
+        optional
+                .orElseThrow(() -> new EntityNotFoundException("Renter with " + id + " not found."));
 
         List<Contract> contractList = contractRepository.findContractByRenterId(id);
         Contract contract;

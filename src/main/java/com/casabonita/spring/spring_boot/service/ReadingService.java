@@ -8,7 +8,7 @@ public interface ReadingService {
 
     List<Reading> findAll();
 
-    void save(Reading reading, String meterNumber);
+    Reading save(Reading reading, String meterNumber);
 
     Reading findById(Integer id);
 

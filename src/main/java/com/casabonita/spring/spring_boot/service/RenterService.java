@@ -8,7 +8,7 @@ public interface RenterService {
 
     List<Renter> findAll();
 
-    void save(Renter renter);
+    Renter save(Renter renter);
 
     Renter findById(Integer id);
 

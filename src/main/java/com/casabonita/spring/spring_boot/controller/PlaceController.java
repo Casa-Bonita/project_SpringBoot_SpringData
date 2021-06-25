@@ -1,10 +1,10 @@
 package com.casabonita.spring.spring_boot.controller;
 
 import com.casabonita.spring.spring_boot.dto.PlaceDTO;
+import com.casabonita.spring.spring_boot.dto.SavePlaceDTO;
 import com.casabonita.spring.spring_boot.entity.Place;
 import com.casabonita.spring.spring_boot.service.PlaceService;
 import com.casabonita.spring.spring_boot.utils.MappingUtilsPlace;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api")
 public class PlaceController {
 
-    @Autowired
-    private PlaceService placeService;
+    private final PlaceService placeService;
+    private final MappingUtilsPlace mappingUtilsPlace;
 
-    @Autowired
-    private MappingUtilsPlace mappingUtilsPlace;
+    public PlaceController(PlaceService placeService, MappingUtilsPlace mappingUtilsPlace) {
+        this.placeService = placeService;
+        this.mappingUtilsPlace = mappingUtilsPlace;
+    }
 
     @GetMapping (value = "/places")
     public List<PlaceDTO> showAllPlaces(){
@@ -37,29 +39,29 @@ public class PlaceController {
     }
 
     @PostMapping(value = "/places")
-    public Place addNewPlace(@RequestBody Place place){
+    public PlaceDTO addNewPlace(@RequestBody PlaceDTO placeDTO){
 
-        placeService.save(place);
+        Place place = mappingUtilsPlace.mapToPlace(placeDTO);
 
-        return place;
+        place = placeService.save(place);
+
+        return mappingUtilsPlace.mapToPlaceDTO(place);
     }
 
-    @PutMapping(value = "/places")
-    public Place updatePlace(@RequestBody Place place){
+    @PutMapping(value = "/places/{id}")
+    public PlaceDTO updatePlace(@RequestBody SavePlaceDTO savePlaceDTO, @PathVariable Integer id){
 
-        placeService.save(place);
+        Place place = mappingUtilsPlace.mapToPlace(savePlaceDTO);
 
-        return place;
+        place.setId(id);
+
+        place = placeService.save(place);
+
+        return mappingUtilsPlace.mapToPlaceDTO(place);
     }
 
     @DeleteMapping(value = "/places/{id}")
     public String deletePlace(@PathVariable Integer id){
-
-        Place place = placeService.findById(id);
-
-        if(place == null){
-            return "There is no Place with id = " + id + " in DataBase.";
-        }
 
         placeService.deleteById(id);
 

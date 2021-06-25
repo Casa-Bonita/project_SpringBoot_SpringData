@@ -8,7 +8,7 @@ public interface ContractService {
 
     List<Contract> findAll();
 
-    void save(Contract contract, int contractPlaceNumber, String renterName);
+    Contract save(Contract contract, int contractPlaceNumber, String renterName);
 
     Contract findById(Integer id);
 

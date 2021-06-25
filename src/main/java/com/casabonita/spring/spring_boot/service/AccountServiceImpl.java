@@ -6,7 +6,9 @@ import com.casabonita.spring.spring_boot.entity.Account;
 import com.casabonita.spring.spring_boot.entity.Contract;
 import com.casabonita.spring.spring_boot.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,15 +32,16 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public void save(Account account, String accountContractNumber) {
+    @Transactional
+    public Account save(Account account, String accountContractNumber) {
 
         Account accountToSave;
 
         if(account.getId() == null){
             accountToSave = new Account();
         } else{
-            Optional<Account> optional = accountRepository.findById(account.getId());
-            accountToSave = optional.get();
+            accountToSave = accountRepository.findById(account.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Account with " + account.getId() + " not found."));
         }
 
         accountToSave.setNumber(account.getNumber());
@@ -46,7 +49,7 @@ public class AccountServiceImpl implements AccountService{
         Contract contract = contractRepository.findContractByNumber(accountContractNumber);
         accountToSave.setAccountContract(contract);
 
-        accountRepository.save(accountToSave);
+        return accountRepository.save(accountToSave);
     }
 
     @Override
@@ -76,7 +79,13 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
+
+        Optional<Account> optional = accountRepository.findById(id);
+
+        optional
+                .orElseThrow(() -> new EntityNotFoundException("Account with " + id + " not found."));
 
         paymentRepository.deletePaymentByAccount_Id(id);
         accountRepository.deleteById(id);

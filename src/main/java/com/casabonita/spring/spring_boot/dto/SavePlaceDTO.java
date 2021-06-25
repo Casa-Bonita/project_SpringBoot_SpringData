@@ -1,32 +1,22 @@
 package com.casabonita.spring.spring_boot.dto;
 
-public class PlaceDTO {
+public class SavePlaceDTO {
 
-    private Integer id;
     private int number;
     private String name;
     private double square;
     private int floor;
     private String type;
 
-    public PlaceDTO() {
+    public SavePlaceDTO() {
     }
 
-    public PlaceDTO(Integer id, int number, String name, double square, int floor, String type) {
-        this.id = id;
+    public SavePlaceDTO(int number, String name, double square, int floor, String type) {
         this.number = number;
         this.name = name;
         this.square = square;
         this.floor = floor;
         this.type = type;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public int getNumber() {

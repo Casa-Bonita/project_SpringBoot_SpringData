@@ -9,14 +9,14 @@ public class SavePaymentDTO {
     private Date date;
     private String purpose;
 
-    public SavePaymentDTO() {
-    }
-
     public SavePaymentDTO(String accountNumber, int amount, Date date, String purpose) {
         this.accountNumber = accountNumber;
         this.amount = amount;
         this.date = date;
         this.purpose = purpose;
+    }
+
+    public SavePaymentDTO() {
     }
 
     public String getAccountNumber() {

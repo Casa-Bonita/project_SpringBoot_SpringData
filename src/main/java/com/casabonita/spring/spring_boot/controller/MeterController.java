@@ -1,10 +1,10 @@
 package com.casabonita.spring.spring_boot.controller;
 
 import com.casabonita.spring.spring_boot.dto.MeterDTO;
+import com.casabonita.spring.spring_boot.dto.SaveMeterDTO;
 import com.casabonita.spring.spring_boot.entity.Meter;
 import com.casabonita.spring.spring_boot.service.MeterService;
 import com.casabonita.spring.spring_boot.utils.MappingUtilsMeter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api")
 public class MeterController {
 
-    @Autowired
-    private MeterService meterService;
+    private final MeterService meterService;
+    private final MappingUtilsMeter mappingUtilsMeter;
 
-    @Autowired
-    private MappingUtilsMeter mappingUtilsMeter;
+    public MeterController(MeterService meterService, MappingUtilsMeter mappingUtilsMeter) {
+        this.meterService = meterService;
+        this.mappingUtilsMeter = mappingUtilsMeter;
+    }
 
     @GetMapping (value = "/meters")
     public List<MeterDTO> showAllMeters(){
@@ -37,33 +39,32 @@ public class MeterController {
     }
 
     @PostMapping(value = "/meters")
-    public Meter addNewMeter(@RequestBody Meter meter, @RequestParam int meterPlaceNumber){
+    public MeterDTO addNewMeter(@RequestBody SaveMeterDTO saveMeterDTO){
 
-        meterService.save(meter, meterPlaceNumber);
+        Meter meter = mappingUtilsMeter.mapToMeter(saveMeterDTO);
 
-        return meter;
+        meter = meterService.save(meter, saveMeterDTO.getMeterPlaceDTO().getNumber());
+
+        return mappingUtilsMeter.mapToMeterDTO(meter);
     }
 
-    @PutMapping(value = "/meters")
-    public Meter updateMeter(@RequestBody Meter meter, @RequestParam int meterPlaceNumber){
+    @PutMapping(value = "/meters/{id}")
+    public MeterDTO updateMeter(@RequestBody SaveMeterDTO saveMeterDTO, @PathVariable Integer id){
 
-        meterService.save(meter, meterPlaceNumber);
+        Meter meter = mappingUtilsMeter.mapToMeter(saveMeterDTO);
 
-        return meter;
+        meter.setId(id);
+
+        meter = meterService.save(meter, saveMeterDTO.getMeterPlaceDTO().getNumber());
+
+        return mappingUtilsMeter.mapToMeterDTO(meter);
     }
 
     @DeleteMapping(value = "/meters/{id}")
     public String deleteMeter(@PathVariable Integer id){
 
-        Meter meter = meterService.findById(id);
-
-        if(meter == null){
-            return "There is no Meter with id = " + id + " in DataBase.";
-        }
-
         meterService.deleteById(id);
 
         return "Meter with id = " + id + " was deleted.";
     }
-
 }

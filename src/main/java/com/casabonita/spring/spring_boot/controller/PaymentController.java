@@ -3,10 +3,8 @@ package com.casabonita.spring.spring_boot.controller;
 import com.casabonita.spring.spring_boot.dto.PaymentDTO;
 import com.casabonita.spring.spring_boot.dto.SavePaymentDTO;
 import com.casabonita.spring.spring_boot.entity.Payment;
-import com.casabonita.spring.spring_boot.entity.Renter;
 import com.casabonita.spring.spring_boot.service.PaymentService;
 import com.casabonita.spring.spring_boot.utils.MappingUtilsPayment;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +14,13 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api")
 public class PaymentController {
 
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
+    private final MappingUtilsPayment mappingUtilsPayment;
 
-    @Autowired
-    private MappingUtilsPayment mappingUtilsPayment;
+    public PaymentController(PaymentService paymentService, MappingUtilsPayment mappingUtilsPayment) {
+        this.paymentService = paymentService;
+        this.mappingUtilsPayment = mappingUtilsPayment;
+    }
 
     @GetMapping (value = "/payments")
     public List<PaymentDTO> showAllPayments(){
@@ -43,31 +43,28 @@ public class PaymentController {
 
         Payment payment = mappingUtilsPayment.mapToPayment(savePaymentDTO);
 
-        paymentService.save(payment, savePaymentDTO.getAccountNumber());
+        payment = paymentService.save(payment, savePaymentDTO.getAccountNumber());
 
-        return mappingUtilsPayment.mapToPaymentDTO(paymentService.findById(payment.getId()));
+        return mappingUtilsPayment.mapToPaymentDTO(payment);
     }
 
-//    @PutMapping(value = "/payments")
-//    public Payment updatePayment(@RequestBody Payment payment, @RequestParam String accountNumber){
-//
-//        paymentService.save(payment, accountNumber);
-//
-//        return payment;
-//    }
+    @PutMapping(value = "/payments/{id}")
+    public PaymentDTO updatePayment(@RequestBody SavePaymentDTO savePaymentDTO, @PathVariable Integer id){
+
+        Payment payment = mappingUtilsPayment.mapToPayment(savePaymentDTO);
+
+        payment.setId(id);
+
+        payment = paymentService.save(payment, savePaymentDTO.getAccountNumber());
+
+        return mappingUtilsPayment.mapToPaymentDTO(payment);
+    }
 
     @DeleteMapping(value = "/payments/{id}")
     public String deletePayment(@PathVariable Integer id){
-
-        Payment payment = paymentService.findById(id);
-
-        if(payment == null){
-            return "There is no Payment with id = " + id + " in DataBase.";
-        }
 
         paymentService.deleteById(id);
 
         return "Payment with id = " + id + " was deleted.";
     }
-
 }

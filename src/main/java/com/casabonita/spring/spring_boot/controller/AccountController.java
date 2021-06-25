@@ -1,10 +1,10 @@
 package com.casabonita.spring.spring_boot.controller;
 
 import com.casabonita.spring.spring_boot.dto.AccountDTO;
+import com.casabonita.spring.spring_boot.dto.SaveAccountDTO;
 import com.casabonita.spring.spring_boot.entity.Account;
 import com.casabonita.spring.spring_boot.service.AccountService;
 import com.casabonita.spring.spring_boot.utils.MappingUtilsAccount;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api")
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+    private final MappingUtilsAccount mappingUtilsAccount;
 
-    @Autowired
-    private MappingUtilsAccount mappingUtilsAccount;
+    public AccountController(AccountService accountService, MappingUtilsAccount mappingUtilsAccount) {
+        this.accountService = accountService;
+        this.mappingUtilsAccount = mappingUtilsAccount;
+    }
 
     @GetMapping (value = "/accounts")
     public List<AccountDTO> showAllAccounts(){
@@ -37,33 +39,32 @@ public class AccountController {
     }
 
     @PostMapping(value = "/accounts")
-    public Account addNewAccount(@RequestBody Account account, @RequestParam String accountContractNumber){
+    public AccountDTO addNewAccount(@RequestBody SaveAccountDTO saveAccountDTO){
 
-        accountService.save(account, accountContractNumber);
+        Account account = mappingUtilsAccount.mapToAccount(saveAccountDTO);
 
-        return account;
+        account = accountService.save(account, saveAccountDTO.getAccountContractDTO().getNumber());
+
+        return mappingUtilsAccount.mapToAccountDTO(account);
     }
 
-    @PutMapping(value = "/accounts")
-    public Account updateAccount(@RequestBody Account account, @RequestParam String accountContractNumber){
+    @PutMapping(value = "/accounts/{id}")
+    public AccountDTO updateAccount(@RequestBody SaveAccountDTO saveAccountDTO, @PathVariable Integer id){
 
-        accountService.save(account, accountContractNumber);
+        Account account = mappingUtilsAccount.mapToAccount(saveAccountDTO);
 
-        return account;
+        account.setId(id);
+
+        account = accountService.save(account, saveAccountDTO.getAccountContractDTO().getNumber());
+
+        return mappingUtilsAccount.mapToAccountDTO(account);
     }
 
     @DeleteMapping(value = "/accounts/{id}")
     public String deleteAccount(@PathVariable Integer id){
 
-        Account account = accountService.findById(id);
-
-        if(account == null){
-            return "There is no Account with id = " + id + " in DataBase.";
-        }
-
         accountService.deleteById(id);
 
         return "Account with id = " + id + " was deleted.";
     }
-
 }

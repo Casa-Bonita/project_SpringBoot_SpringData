@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class MappingUtilsPayment {
 
-    private MappingUtilsAccount mappingUtilsAccount;
+    private final MappingUtilsAccount mappingUtilsAccount;
 
     public MappingUtilsPayment(MappingUtilsAccount mappingUtilsAccount) {
         this.mappingUtilsAccount = mappingUtilsAccount;
     }
 
-    //из entity в dto
+    //из Entity в DTO
     public PaymentDTO mapToPaymentDTO(Payment payment){
         PaymentDTO dto = new PaymentDTO();
         dto.setId(payment.getId());
@@ -26,7 +26,7 @@ public class MappingUtilsPayment {
         return dto;
     }
 
-    //из dto в entity
+    //из DTO в Entity
     public Payment mapToPayment(PaymentDTO dto){
         Payment payment = new Payment();
         payment.setId(dto.getId());
@@ -38,7 +38,7 @@ public class MappingUtilsPayment {
         return payment;
     }
 
-    //из SavePaymentDTO в entity
+    //из SavePaymentDTO в Entity
     public Payment mapToPayment(SavePaymentDTO savePaymentDTO){
         Payment payment = new Payment();
         payment.setAmount(savePaymentDTO.getAmount());

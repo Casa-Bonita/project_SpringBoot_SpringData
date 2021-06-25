@@ -8,6 +8,7 @@ import com.casabonita.spring.spring_boot.entity.Place;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,9 +40,25 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public void save(Place place) {
+    @Transactional
+    public Place save(Place place) {
 
-        placeRepository.save(place);
+        Place placeToSave;
+
+        if(place.getId() == null){
+            placeToSave =  new Place();
+        }else{
+            placeToSave = placeRepository.findById(place.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Place with " + place.getId() + " not found."));
+        }
+
+        placeToSave.setNumber(place.getNumber());
+        placeToSave.setName(place.getName());
+        placeToSave.setSquare(place.getSquare());
+        placeToSave.setFloor(place.getFloor());
+        placeToSave.setType(place.getType());
+
+        return placeRepository.save(placeToSave);
     }
 
     @Override
@@ -65,7 +82,13 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
+
+        Optional<Place> optional = placeRepository.findById(id);
+
+        optional
+                .orElseThrow(() -> new EntityNotFoundException("Place with " + id + " not found."));
 
         Meter meter = meterRepository.findMeterByMeterPlace_Id(id);
         Integer meterId;

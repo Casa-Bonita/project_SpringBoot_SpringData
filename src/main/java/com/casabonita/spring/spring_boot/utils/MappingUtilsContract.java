@@ -1,6 +1,7 @@
 package com.casabonita.spring.spring_boot.utils;
 
 import com.casabonita.spring.spring_boot.dto.ContractDTO;
+import com.casabonita.spring.spring_boot.dto.SaveContractDTO;
 import com.casabonita.spring.spring_boot.entity.Contract;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ public class MappingUtilsContract {
         this.mappingUtilsRenter = mappingUtilsRenter;
     }
 
-    //из entity в dto
+    //из Entity в DTO
     public ContractDTO mapToContractDTO(Contract contract){
         ContractDTO dto = new ContractDTO();
         dto.setId(contract.getId());
@@ -31,7 +32,7 @@ public class MappingUtilsContract {
         return dto;
     }
 
-    //из dto в entity
+    //из DTO в Entity
     public Contract mapToContract(ContractDTO dto){
         Contract contract = new Contract();
         contract.setId(dto.getId());
@@ -43,6 +44,21 @@ public class MappingUtilsContract {
         contract.setPaymentDay(dto.getPaymentDay());
         contract.setContractPlace(mappingUtilsPlace.mapToPlace(dto.getContractPlaceDTO()));
         contract.setRenter(mappingUtilsRenter.mapToRenter(dto.getRenterDTO()));
+
+        return contract;
+    }
+
+    //из SaveContractDTO в Entity
+    public Contract mapToContract(SaveContractDTO saveContractDTO){
+        Contract contract = new Contract();
+        contract.setNumber(saveContractDTO.getNumber());
+        contract.setDate(saveContractDTO.getDate());
+        contract.setFare(saveContractDTO.getFare());
+        contract.setStartDate(saveContractDTO.getStartDate());
+        contract.setFinishDate(saveContractDTO.getFinishDate());
+        contract.setPaymentDay(saveContractDTO.getPaymentDay());
+        contract.setContractPlace(mappingUtilsPlace.mapToPlace(saveContractDTO.getContractPlaceDTO()));
+        contract.setRenter(mappingUtilsRenter.mapToRenter(saveContractDTO.getRenterDTO()));
 
         return contract;
     }

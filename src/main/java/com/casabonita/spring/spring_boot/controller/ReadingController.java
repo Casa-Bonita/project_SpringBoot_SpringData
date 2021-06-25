@@ -1,10 +1,10 @@
 package com.casabonita.spring.spring_boot.controller;
 
 import com.casabonita.spring.spring_boot.dto.ReadingDTO;
+import com.casabonita.spring.spring_boot.dto.SaveReadingDTO;
 import com.casabonita.spring.spring_boot.entity.Reading;
 import com.casabonita.spring.spring_boot.service.ReadingService;
 import com.casabonita.spring.spring_boot.utils.MappingUtilsReading;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api")
 public class ReadingController {
 
-    @Autowired
-    private ReadingService readingService;
+    private final ReadingService readingService;
+    private final MappingUtilsReading mappingUtilsReading;
 
-    @Autowired
-    private MappingUtilsReading mappingUtilsReading;
+    public ReadingController(ReadingService readingService, MappingUtilsReading mappingUtilsReading) {
+        this.readingService = readingService;
+        this.mappingUtilsReading = mappingUtilsReading;
+    }
 
     @GetMapping (value = "/readings")
     public List<ReadingDTO> showAllReadings(){
@@ -37,33 +39,32 @@ public class ReadingController {
     }
 
     @PostMapping(value = "/readings")
-    public Reading addNewReading(@RequestBody Reading reading, @RequestParam String meterNumber){
+    public ReadingDTO addNewReading(@RequestBody SaveReadingDTO saveReadingDTO){
 
-        readingService.save(reading, meterNumber);
+        Reading reading = mappingUtilsReading.mapToReading(saveReadingDTO);
 
-        return reading;
+        reading = readingService.save(reading, saveReadingDTO.getMeterNumber());
+
+        return mappingUtilsReading.mapToReadingDTO(reading);
     }
 
     @PutMapping(value = "/readings")
-    public Reading updateReading(@RequestBody Reading reading, @RequestParam String meterNumber){
+    public ReadingDTO updateReading(@RequestBody SaveReadingDTO saveReadingDTO, @PathVariable Integer id){
 
-        readingService.save(reading, meterNumber);
+        Reading reading = mappingUtilsReading.mapToReading(saveReadingDTO);
 
-        return reading;
+        reading.setId(id);
+
+        reading = readingService.save(reading, saveReadingDTO.getMeterNumber());
+
+        return mappingUtilsReading.mapToReadingDTO(reading);
     }
 
     @DeleteMapping(value = "/readings/{id}")
     public String deleteReading(@PathVariable Integer id){
 
-        Reading reading = readingService.findById(id);
-
-        if(reading == null){
-            return "There is no Reading with id = " + id + " in DataBase.";
-        }
-
         readingService.deleteById(id);
 
         return "Reading with id = " + id + " was deleted.";
     }
-
 }
