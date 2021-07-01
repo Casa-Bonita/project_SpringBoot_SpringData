@@ -38,7 +38,6 @@ public class MappingUtilsMeter {
     public Meter mapToMeter(SaveMeterDTO saveMeterDTO){
         Meter meter = new Meter();
         meter.setNumber(saveMeterDTO.getNumber());
-        meter.setMeterPlace(mappingUtilsPlace.mapToPlace(saveMeterDTO.getMeterPlaceDTO()));
 
         return meter;
     }

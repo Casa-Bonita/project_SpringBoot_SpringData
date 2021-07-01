@@ -4,7 +4,6 @@ import com.casabonita.spring.spring_boot.repository.AccountRepository;
 import com.casabonita.spring.spring_boot.repository.PaymentRepository;
 import com.casabonita.spring.spring_boot.entity.Account;
 import com.casabonita.spring.spring_boot.entity.Payment;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,6 +80,6 @@ public class PaymentServiceImpl implements PaymentService{
     @Override
     public void deletePaymentByAccount_Id(Integer id) {
 
-        paymentRepository.deletePaymentByAccount_Id(id);
+        paymentRepository.deletePaymentByAccountId(id);
     }
 }

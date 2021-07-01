@@ -98,13 +98,13 @@ public class PlaceServiceImpl implements PlaceService{
 
         if (contract == null){
             if(meter == null){
-                placeRepository.deleteById(id);
+                placeRepository.deleteBy(id);
             }else{
                 meterId = meter.getId();
-                readingRepository.deleteReadingByMeter_Id(meterId);
-                meterRepository.deleteById(meterId);
+                readingRepository.deleteReadingByMeterId(meterId);
+                meterRepository.deleteBy(meterId);
 
-                placeRepository.deleteById(id);
+                placeRepository.deleteBy(id);
             }
         }else{
             Account account = accountRepository.findAccountByAccountContract_Id(contract.getId());
@@ -113,42 +113,42 @@ public class PlaceServiceImpl implements PlaceService{
             if(account == null){
                 if(meter == null){
                     contractId = contract.getId();
-                    contractRepository.deleteById(contractId);
+                    contractRepository.deleteBy(contractId);
 
-                    placeRepository.deleteById(id);
+                    placeRepository.deleteBy(id);
                 }else{
                     meterId = meter.getId();
-                    readingRepository.deleteReadingByMeter_Id(meterId);
-                    meterRepository.deleteById(meterId);
+                    readingRepository.deleteReadingByMeterId(meterId);
+                    meterRepository.deleteBy(meterId);
 
                     contractId = contract.getId();
-                    contractRepository.deleteById(contractId);
+                    contractRepository.deleteBy(contractId);
 
-                    placeRepository.deleteById(id);
+                    placeRepository.deleteBy(id);
                 }
             }else{
                 if(meter == null){
                     accountId = account.getId();
-                    paymentRepository.deletePaymentByAccount_Id(accountId);
-                    accountRepository.deleteById(accountId);
+                    paymentRepository.deletePaymentByAccountId(accountId);
+                    accountRepository.deleteBy(accountId);
 
                     contractId = contract.getId();
-                    contractRepository.deleteById(contractId);
+                    contractRepository.deleteBy(contractId);
 
-                    placeRepository.deleteById(id);
+                    placeRepository.deleteBy(id);
                 }else{
                     accountId = account.getId();
-                    paymentRepository.deletePaymentByAccount_Id(accountId);
-                    accountRepository.deleteById(accountId);
+                    paymentRepository.deletePaymentByAccountId(accountId);
+                    accountRepository.deleteBy(accountId);
 
                     contractId = contract.getId();
-                    contractRepository.deleteById(contractId);
+                    contractRepository.deleteBy(contractId);
 
                     meterId = meter.getId();
-                    readingRepository.deleteReadingByMeter_Id(meterId);
-                    meterRepository.deleteById(meterId);
+                    readingRepository.deleteReadingByMeterId(meterId);
+                    meterRepository.deleteBy(meterId);
 
-                    placeRepository.deleteById(id);
+                    placeRepository.deleteBy(id);
                 }
             }
         }

@@ -43,7 +43,7 @@ public class ContractController {
 
         Contract contract = mappingUtilsContract.mapToContract(saveContractDTO);
 
-        contract = contractService.save(contract, saveContractDTO.getContractPlaceDTO().getNumber(), saveContractDTO.getRenterDTO().getName());
+        contract = contractService.save(contract, saveContractDTO.getPlaceNumber(), saveContractDTO.getRenterName());
 
         return mappingUtilsContract.mapToContractDTO(contract);
     }
@@ -55,7 +55,7 @@ public class ContractController {
 
         contract.setId(id);
 
-        contract = contractService.save(contract, saveContractDTO.getContractPlaceDTO().getNumber(), saveContractDTO.getRenterDTO().getName());
+        contract = contractService.save(contract, saveContractDTO.getPlaceNumber(), saveContractDTO.getRenterName());
 
         return mappingUtilsContract.mapToContractDTO(contract);
     }

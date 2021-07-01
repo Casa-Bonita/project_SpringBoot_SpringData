@@ -57,8 +57,6 @@ public class MappingUtilsContract {
         contract.setStartDate(saveContractDTO.getStartDate());
         contract.setFinishDate(saveContractDTO.getFinishDate());
         contract.setPaymentDay(saveContractDTO.getPaymentDay());
-        contract.setContractPlace(mappingUtilsPlace.mapToPlace(saveContractDTO.getContractPlaceDTO()));
-        contract.setRenter(mappingUtilsRenter.mapToRenter(saveContractDTO.getRenterDTO()));
 
         return contract;
     }

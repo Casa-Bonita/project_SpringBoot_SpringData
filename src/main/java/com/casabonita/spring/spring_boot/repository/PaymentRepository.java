@@ -11,5 +11,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     @Query("delete from Payment where id=:id")
     void deleteBy(Integer id);
 
-    void deletePaymentByAccount_Id(Integer id);
+    @Modifying
+    @Query("delete from Payment where account.id=:id")
+    void deletePaymentByAccountId(Integer id);
 }

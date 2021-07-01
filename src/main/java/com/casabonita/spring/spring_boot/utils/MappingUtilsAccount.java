@@ -3,6 +3,7 @@ package com.casabonita.spring.spring_boot.utils;
 import com.casabonita.spring.spring_boot.dto.AccountDTO;
 import com.casabonita.spring.spring_boot.dto.SaveAccountDTO;
 import com.casabonita.spring.spring_boot.entity.Account;
+import com.casabonita.spring.spring_boot.entity.Contract;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,7 +39,6 @@ public class MappingUtilsAccount {
     public Account mapToAccount(SaveAccountDTO saveAccountDTO){
         Account account = new Account();
         account.setNumber(saveAccountDTO.getNumber());
-        account.setAccountContract(mappingUtilsContract.mapToContract(saveAccountDTO.getAccountContractDTO()));
 
         return account;
     }

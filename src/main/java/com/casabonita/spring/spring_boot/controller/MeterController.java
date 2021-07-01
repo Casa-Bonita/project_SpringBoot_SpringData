@@ -43,7 +43,7 @@ public class MeterController {
 
         Meter meter = mappingUtilsMeter.mapToMeter(saveMeterDTO);
 
-        meter = meterService.save(meter, saveMeterDTO.getMeterPlaceDTO().getNumber());
+        meter = meterService.save(meter, saveMeterDTO.getPlaceNumber());
 
         return mappingUtilsMeter.mapToMeterDTO(meter);
     }
@@ -55,7 +55,7 @@ public class MeterController {
 
         meter.setId(id);
 
-        meter = meterService.save(meter, saveMeterDTO.getMeterPlaceDTO().getNumber());
+        meter = meterService.save(meter, saveMeterDTO.getPlaceNumber());
 
         return mappingUtilsMeter.mapToMeterDTO(meter);
     }

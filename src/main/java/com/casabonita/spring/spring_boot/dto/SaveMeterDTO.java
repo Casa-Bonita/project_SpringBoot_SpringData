@@ -3,14 +3,14 @@ package com.casabonita.spring.spring_boot.dto;
 public class SaveMeterDTO {
 
     private String number;
-    private PlaceDTO meterPlaceDTO;
+    private int placeNumber;
 
     public SaveMeterDTO() {
     }
 
-    public SaveMeterDTO(String number, PlaceDTO meterPlaceDTO) {
+    public SaveMeterDTO(String number, int placeNumber) {
         this.number = number;
-        this.meterPlaceDTO = meterPlaceDTO;
+        this.placeNumber = placeNumber;
     }
 
     public String getNumber() {
@@ -21,11 +21,11 @@ public class SaveMeterDTO {
         this.number = number;
     }
 
-    public PlaceDTO getMeterPlaceDTO() {
-        return meterPlaceDTO;
+    public int getPlaceNumber() {
+        return placeNumber;
     }
 
-    public void setMeterPlaceDTO(PlaceDTO meterPlaceDTO) {
-        this.meterPlaceDTO = meterPlaceDTO;
+    public void setPlaceNumber(int placeNumber) {
+        this.placeNumber = placeNumber;
     }
 }

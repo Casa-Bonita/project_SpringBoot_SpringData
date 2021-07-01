@@ -38,7 +38,7 @@ public class ContractServiceImpl implements ContractService{
 
     @Override
     @Transactional
-    public Contract save(Contract contract, int contractPlaceNumber, String renterName) {
+    public Contract save(Contract contract, int placeNumber, String renterName) {
 
         Contract contractToSave;
 
@@ -56,7 +56,7 @@ public class ContractServiceImpl implements ContractService{
         contractToSave.setFinishDate(contract.getFinishDate());
         contractToSave.setPaymentDay(contract.getPaymentDay());
 
-        Place place = placeRepository.findPlaceByNumber(contractPlaceNumber);
+        Place place = placeRepository.findPlaceByNumber(placeNumber);
         contractToSave.setContractPlace(place);
 
         Renter renter = renterRepository.findByName(renterName);
@@ -110,11 +110,11 @@ public class ContractServiceImpl implements ContractService{
         Integer accountId = account.getId();
 
         if(account == null){
-            contractRepository.deleteById(id);
+            contractRepository.deleteBy(id);
         }else{
-            paymentRepository.deletePaymentByAccount_Id(accountId);
-            accountRepository.deleteById(accountId);
-            contractRepository.deleteById(id);
+            paymentRepository.deletePaymentByAccountId(accountId);
+            accountRepository.deleteBy(accountId);
+            contractRepository.deleteBy(id);
         }
     }
 }

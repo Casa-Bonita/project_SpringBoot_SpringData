@@ -3,14 +3,14 @@ package com.casabonita.spring.spring_boot.dto;
 public class SaveAccountDTO {
 
     private String number;
-    private ContractDTO accountContractDTO;
+    private String contractNumber;
 
     public SaveAccountDTO() {
     }
 
-    public SaveAccountDTO(String number, ContractDTO accountContractDTO) {
+    public SaveAccountDTO(String number, String contractNumber) {
         this.number = number;
-        this.accountContractDTO = accountContractDTO;
+        this.contractNumber = contractNumber;
     }
 
     public String getNumber() {
@@ -21,11 +21,11 @@ public class SaveAccountDTO {
         this.number = number;
     }
 
-    public ContractDTO getAccountContractDTO() {
-        return accountContractDTO;
+    public String getContractNumber() {
+        return contractNumber;
     }
 
-    public void setAccountContractDTO(ContractDTO accountContractDTO) {
-        this.accountContractDTO = accountContractDTO;
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
     }
 }

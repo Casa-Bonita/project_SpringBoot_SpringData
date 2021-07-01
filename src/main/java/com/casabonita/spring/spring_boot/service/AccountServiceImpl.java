@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     @Transactional
-    public Account save(Account account, String accountContractNumber) {
+    public Account save(Account account, String contractNumber) {
 
         Account accountToSave;
 
@@ -46,7 +46,7 @@ public class AccountServiceImpl implements AccountService{
 
         accountToSave.setNumber(account.getNumber());
 
-        Contract contract = contractRepository.findContractByNumber(accountContractNumber);
+        Contract contract = contractRepository.findContractByNumber(contractNumber);
         accountToSave.setAccountContract(contract);
 
         return accountRepository.save(accountToSave);
@@ -87,7 +87,7 @@ public class AccountServiceImpl implements AccountService{
         optional
                 .orElseThrow(() -> new EntityNotFoundException("Account with " + id + " not found."));
 
-        paymentRepository.deletePaymentByAccount_Id(id);
-        accountRepository.deleteById(id);
+        paymentRepository.deletePaymentByAccountId(id);
+        accountRepository.deleteBy(id);
     }
 }

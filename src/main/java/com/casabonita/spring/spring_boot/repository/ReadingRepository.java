@@ -11,5 +11,7 @@ public interface ReadingRepository extends JpaRepository<Reading, Integer> {
     @Query("delete from Reading where id=:id")
     void deleteBy(Integer id);
 
-    void deleteReadingByMeter_Id(Integer id);
+    @Modifying
+    @Query("delete from Reading where meter.id=:id")
+    void deleteReadingByMeterId(Integer id);
 }

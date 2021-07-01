@@ -34,7 +34,7 @@ public class MeterServiceImpl implements MeterService{
 
     @Override
     @Transactional
-    public Meter save(Meter meter, int meterPlaceNumber) {
+    public Meter save(Meter meter, int placeNumber) {
 
         Meter meterToSave;
 
@@ -48,10 +48,10 @@ public class MeterServiceImpl implements MeterService{
 
         meterToSave.setNumber(meter.getNumber());
 
-        Place place = placeRepository.findPlaceByNumber(meterPlaceNumber);
+        Place place = placeRepository.findPlaceByNumber(placeNumber);
         meterToSave.setMeterPlace(place);
 
-        return  meterRepository.save(meterToSave);
+        return meterRepository.save(meterToSave);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class MeterServiceImpl implements MeterService{
         optional
                 .orElseThrow(() -> new EntityNotFoundException("Meter with " + id + " not found."));
 
-        readingRepository.deleteReadingByMeter_Id(id);
-        meterRepository.deleteById(id);
+        readingRepository.deleteReadingByMeterId(id);
+        meterRepository.deleteBy(id);
     }
 }

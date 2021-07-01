@@ -94,7 +94,7 @@ public class RenterServiceImpl implements RenterService{
         Integer accountId;
 
         if (contractList.isEmpty()) {
-            renterRepository.deleteById(id);
+            renterRepository.deleteBy(id);
         }else{
             for (int i = 0; i < contractList.size(); i++) {
                 contract = contractList.get(i);
@@ -104,13 +104,13 @@ public class RenterServiceImpl implements RenterService{
                 accountId = account.getId();
 
                 if(account == null){
-                    contractRepository.deleteById(contractId);
-                    renterRepository.deleteById(id);
+                    contractRepository.deleteBy(contractId);
+                    renterRepository.deleteBy(id);
                 }else{
-                    paymentRepository.deletePaymentByAccount_Id(accountId);
-                    accountRepository.deleteById(accountId);
-                    contractRepository.deleteById(contractId);
-                    renterRepository.deleteById(id);
+                    paymentRepository.deletePaymentByAccountId(accountId);
+                    accountRepository.deleteBy(accountId);
+                    contractRepository.deleteBy(contractId);
+                    renterRepository.deleteBy(id);
                 }
             }
         }

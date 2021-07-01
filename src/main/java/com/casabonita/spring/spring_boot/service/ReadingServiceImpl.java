@@ -1,6 +1,5 @@
 package com.casabonita.spring.spring_boot.service;
 
-import com.casabonita.spring.spring_boot.entity.Payment;
 import com.casabonita.spring.spring_boot.repository.MeterRepository;
 import com.casabonita.spring.spring_boot.repository.ReadingRepository;
 import com.casabonita.spring.spring_boot.entity.Meter;
@@ -74,12 +73,12 @@ public class ReadingServiceImpl implements ReadingService{
         optional
                 .orElseThrow(() -> new EntityNotFoundException("Reading with " + id + " not found."));
 
-        readingRepository.deleteById(id);
+        readingRepository.deleteBy(id);
     }
 
     @Override
     public void deleteReadingByMeter_Id(Integer id) {
 
-        readingRepository.deleteReadingByMeter_Id(id);
+        readingRepository.deleteReadingByMeterId(id);
     }
 }

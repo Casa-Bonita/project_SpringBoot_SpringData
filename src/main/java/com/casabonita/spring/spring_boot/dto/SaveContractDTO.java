@@ -10,22 +10,21 @@ public class SaveContractDTO {
     private Date startDate;
     private Date finishDate;
     private int paymentDay;
-    private PlaceDTO contractPlaceDTO;
-    private RenterDTO renterDTO;
+    private int placeNumber;
+    private String renterName;
 
     public SaveContractDTO() {
     }
 
-    public SaveContractDTO(String number, Date date, int fare, Date startDate, Date finishDate, int paymentDay,
-                           PlaceDTO contractPlaceDTO, RenterDTO renterDTO) {
+    public SaveContractDTO(String number, Date date, int fare, Date startDate, Date finishDate, int paymentDay, int placeNumber, String renterName) {
         this.number = number;
         this.date = date;
         this.fare = fare;
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.paymentDay = paymentDay;
-        this.contractPlaceDTO = contractPlaceDTO;
-        this.renterDTO = renterDTO;
+        this.placeNumber = placeNumber;
+        this.renterName = renterName;
     }
 
     public String getNumber() {
@@ -76,19 +75,19 @@ public class SaveContractDTO {
         this.paymentDay = paymentDay;
     }
 
-    public PlaceDTO getContractPlaceDTO() {
-        return contractPlaceDTO;
+    public int getPlaceNumber() {
+        return placeNumber;
     }
 
-    public void setContractPlaceDTO(PlaceDTO contractPlaceDTO) {
-        this.contractPlaceDTO = contractPlaceDTO;
+    public void setPlaceNumber(int placeNumber) {
+        this.placeNumber = placeNumber;
     }
 
-    public RenterDTO getRenterDTO() {
-        return renterDTO;
+    public String getRenterName() {
+        return renterName;
     }
 
-    public void setRenterDTO(RenterDTO renterDTO) {
-        this.renterDTO = renterDTO;
+    public void setRenterName(String renterName) {
+        this.renterName = renterName;
     }
 }

@@ -43,7 +43,7 @@ public class AccountController {
 
         Account account = mappingUtilsAccount.mapToAccount(saveAccountDTO);
 
-        account = accountService.save(account, saveAccountDTO.getAccountContractDTO().getNumber());
+        account = accountService.save(account, saveAccountDTO.getContractNumber());
 
         return mappingUtilsAccount.mapToAccountDTO(account);
     }
@@ -55,7 +55,7 @@ public class AccountController {
 
         account.setId(id);
 
-        account = accountService.save(account, saveAccountDTO.getAccountContractDTO().getNumber());
+        account = accountService.save(account, saveAccountDTO.getContractNumber());
 
         return mappingUtilsAccount.mapToAccountDTO(account);
     }

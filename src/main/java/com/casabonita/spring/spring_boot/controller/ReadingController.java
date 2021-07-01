@@ -48,7 +48,7 @@ public class ReadingController {
         return mappingUtilsReading.mapToReadingDTO(reading);
     }
 
-    @PutMapping(value = "/readings")
+    @PutMapping(value = "/readings/{id}")
     public ReadingDTO updateReading(@RequestBody SaveReadingDTO saveReadingDTO, @PathVariable Integer id){
 
         Reading reading = mappingUtilsReading.mapToReading(saveReadingDTO);
