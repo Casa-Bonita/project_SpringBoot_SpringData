@@ -4,6 +4,7 @@ import com.casabonita.spring.spring_boot.repository.*;
 import com.casabonita.spring.spring_boot.entity.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.List;
@@ -38,11 +39,31 @@ class PlaceServiceImplTest {
 
         Place expected = new Place();
 
-        Mockito.doNothing().when(placeRepository).save(expected);
+        int number = 1;
+        String name = "testName";
+        double square = 123.45;
+        int floor = 1;
+        String type = "testType";
+
+        expected.setNumber(number);
+        expected.setName(name);
+        expected.setSquare(square);
+        expected.setFloor(floor);
+        expected.setType(type);
+
+        ArgumentCaptor<Place> placeCaptor = ArgumentCaptor.forClass(Place.class);
 
         placeService.save(expected);
 
-        Mockito.verify(placeRepository, times(1)).save(expected);
+        Mockito.verify(placeRepository, times(1)).save(placeCaptor.capture());
+
+        Place actual = placeCaptor.getValue();
+
+        Assertions.assertEquals(number, actual.getNumber());
+        Assertions.assertEquals(name, actual.getName());
+        Assertions.assertEquals(square, actual.getSquare());
+        Assertions.assertEquals(floor, actual.getFloor());
+        Assertions.assertEquals(type, actual.getType());
     }
 
     @Test

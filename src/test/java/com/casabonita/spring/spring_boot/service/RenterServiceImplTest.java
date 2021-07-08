@@ -4,8 +4,12 @@ import com.casabonita.spring.spring_boot.repository.*;
 import com.casabonita.spring.spring_boot.entity.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,15 +36,47 @@ public class RenterServiceImplTest {
     }
 
     @Test
-    public void shouldSaveRenter(){
+    public void shouldSaveRenter() throws ParseException {
 
         Renter expected = new Renter();
 
-        Mockito.doNothing().when(renterRepository).save(expected);
+        String name = "testName";
+        String ogrn = "testOgrn";
+        String inn = "testInn";
+        String d = "2020-12-05";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = sdf.parse(d);
+        String address = "testAdress";
+        String directorName = "testDirectorName";
+        String contactName = "testContactName";
+        String phoneNumber = "testPhoneNumber";
+
+        expected.setName(name);
+        expected.setOgrn(ogrn);
+        expected.setInn(inn);
+        expected.setRegistrDate(date);
+        expected.setAddress(address);
+        expected.setDirectorName(directorName);
+        expected.setContactName(contactName);
+        expected.setPhoneNumber(phoneNumber);
+
+        ArgumentCaptor<Renter> renterCaptor = ArgumentCaptor.forClass(Renter.class);
 
         renterService.save(expected);
 
-        Mockito.verify(renterRepository, times(1)).save(expected);
+        Mockito.verify(renterRepository, times(1)).save(renterCaptor.capture());
+
+        Renter actual = renterCaptor.getValue();
+
+        Assertions.assertEquals(name, actual.getName());
+        Assertions.assertEquals(ogrn, actual.getOgrn());
+        Assertions.assertEquals(inn, actual.getInn());
+        Assertions.assertEquals(date, actual.getRegistrDate());
+        Assertions.assertEquals(address, actual.getAddress());
+        Assertions.assertEquals(directorName, actual.getDirectorName());
+        Assertions.assertEquals(contactName, actual.getContactName());
+        Assertions.assertEquals(phoneNumber, actual.getPhoneNumber());
+
     }
 
     @Test

@@ -43,6 +43,9 @@ class ContractServiceImplTest {
         int contractPlaceNumber = 123;
         String contractRenterName = "TestName";
 
+        placeExpected.setNumber(contractPlaceNumber);
+        renterExpected.setName(contractRenterName);
+
         ArgumentCaptor<Contract> requestCaptor = ArgumentCaptor.forClass(Contract.class);
         Mockito.when(placeRepository.findPlaceByNumber(contractPlaceNumber)).thenReturn(placeExpected);
 
